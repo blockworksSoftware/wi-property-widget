@@ -1,4 +1,6 @@
-This is a fork of https://github.com/ALM-Rangers/Work-Item-Details-Widget-Extension with the ability to show a specific property.
+This is the new home of the Work Item Property Widget, formerly maintained at https://github.com/blockworks-com/Work-Item-Property-Widget. The extension ID and publisher (`blockworks-com`) are unchanged, so existing installs continue to update.
+
+Based on https://github.com/ALM-Rangers/Work-Item-Details-Widget-Extension, with the ability to show a specific property.
 
 Requires using Typescript 2.3.4
 
