@@ -7,7 +7,7 @@
     "gallery-publish": "tfx extension publish --rev-version",
     "clean-before-build": "rimraf ./dist && rimraf ./*.vsix",
     "clean-after-build": "rimraf ./scripts/telemetryclient.js && rimraf ./scripts/telemetryclient.d.ts",
-    "lint": "tslint -c tslint.json \"scripts/*.ts",
+    "lint": "tslint -c tslint.json \"scripts/*.ts\"",
     "webpack": "webpack --progress --colors --config webpack.config.js --output-path ./dist -p"
   },
   "devDependencies": {
