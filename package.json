@@ -2,7 +2,7 @@
   "scripts": {
     "build": "npm run copy-lib && npm run lint && npm run clean-before-build && npm run webpack",
     "postbuild": "npm run clean-after-build",
-    "copy-lib": "cpx node_modules/telemetryclient-team-services-extension/lib/*.* scripts",
+    "copy-lib": "cpx \"node_modules/telemetryclient-team-services-extension/lib/*.*\" scripts",
     "package": "tfx extension create  --rev-version",
     "gallery-publish": "tfx extension publish --rev-version",
     "clean-before-build": "rimraf ./dist && rimraf ./*.vsix",
