@@ -9,12 +9,11 @@
 // <summary>TypeScript file for Work Item Property Widget extension</summary>
 // ---------------------------------------------------------------------
 "use strict";
-let DEBUG: boolean = true;
+let DEBUG: boolean = false;
 let logger = function(a: any, b: any) { if (DEBUG) { console.log(a, b || ""); } };
 
 import Services = require("VSS/Authentication/Services");
-import * as tc from "telemetryclient-team-services-extension";
-import telemetryClientSettings = require("./telemetryClientSettings");
+import * as telemetry from "./telemetry";
 
 export class WiMenu {
     constructor() {}
@@ -41,7 +40,7 @@ export class WiMenu {
                 },
                 error: e => {
                     logger("getDashboards", "Exception: " + e.response);
-                    tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackException(e.response);
+                    telemetry.trackError(true, "menu-request-failed");
                 }
             });
 
@@ -69,7 +68,7 @@ export class WiMenu {
                 },
                 error: e => {
                     logger("getDashboard", "Exception: " + e.response);
-                    tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackException(e.response);
+                    telemetry.trackError(true, "menu-request-failed");
                 }
             });
 
@@ -106,7 +105,7 @@ export class WiMenu {
                     },
                     error: e => {
                         logger("addWidgetToDashboard", "Exception: " + e.response);
-                        tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackException(e.response);
+                        telemetry.trackError(true, "menu-request-failed");
                     }
                 });
 
@@ -146,7 +145,7 @@ VSS.register(contributionId, {
                     text: dashboard.name,
                     title: dashboard.name,
                     action: () => {
-                        tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackPageView("ContextMenuAddToDashboard");
+                        telemetry.track(true, "AddToDashboard");
                         ids.forEach((value, index) => {
                             w.addWidgetToDashboard(dashboard.id, value).then(() => { });
                         });
