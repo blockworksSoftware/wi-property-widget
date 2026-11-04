@@ -1,0 +1,34 @@
+name: Validate
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '10.x'
+      - name: Scan for secrets
+        run: |
+          python3 -m pip install --user detect-secrets==1.5.0
+          export PATH="$HOME/.local/bin:$PATH"
+          detect-secrets scan --all-files --exclude-files '(^|/)(\.git|node_modules|dist|obj)/|package-lock\.json$' > secrets.json
+          python3 -c "import json,sys; d=json.load(open('secrets.json')); f=[(k,r['line_number'],r['type']) for k,v in d['results'].items() for r in v]; [print(*x) for x in f]; sys.exit(1 if f else 0)"
+      - name: Check for internal and personal references
+        run: |
+          if grep -rInE "blockworks\.com|outlook\.com|onmicrosoft\.com" --exclude-dir=node_modules --exclude-dir=.git --exclude=package-lock.json .; then
+            echo "Internal or personal reference found in public source."
+            exit 1
+          fi
+      - name: Install, audit production dependencies, and build
+        run: |
+          npm ci
+          npm audit --production --audit-level=high
+          npm run build
