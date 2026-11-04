@@ -25,7 +25,7 @@ Adding the widget from a dashboard's context menu is counted as a feature use. T
 For more information about Application Insights please refer to [https://azure.microsoft.com/en-us/services/application-insights].
 
 ### Retention
-- Detailed events, including location, are kept for 30 days.
+- Detailed events, including location, are kept for 31 days.
 - Monthly counts are kept for 13 months. They contain the number of distinct users and the number of feature uses per organization hash. They do not contain user hashes or location.
 
 ### Privacy
