@@ -26,8 +26,6 @@ import WorkContracts = require("TFS/Work/Contracts");
 import Contracts = require("TFS/WorkItemTracking/Contracts");
 import RestClientWI = require("TFS/WorkItemTracking/RestClient");
 import { enableElement } from "VSS/Utils/UI";
-import * as tc from "telemetryclient-team-services-extension";
-import telemetryClientSettings = require("./telemetryClientSettings");
 
 export class Configuration {
     widgetConfigurationContext = null;
@@ -63,9 +61,6 @@ export class Configuration {
         let $enableDebug = $("#enableDebug");
 
         logger("load", "enabletelemetry (using settings) = " + _that.$enableTelemetry);
-        if (_that.$enableTelemetry) {
-            tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackPageView("Starting Configuration");
-        }
 
         this.widgetConfigurationContext = widgetConfigurationContext;
 
@@ -168,7 +163,6 @@ export class Configuration {
                     $(".btn-cta").attr("disabled", "disabled");
 
                     logger("linewi.blur", "Error: " + $errorSingleLineInput.text());
-                    tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackException($errorSingleLineInput.text());
 
                     return _that.WidgetHelpers.WidgetStatusHelper.Failure();
 
@@ -214,12 +208,6 @@ export class Configuration {
         $errorSingleLineInput = $("#lineenableTelemetry .validation-error-text");
         _that.$enableTelemetry.blur(() => {
             logger("load", "lineenableTelemetry:blur");
-
-            if (_that.$enableTelemetry) {
-                tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackEvent("Telemetry Disabled");
-            } else {
-                tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackEvent("Telemetry Enabled");
-            }
 
             _that.widgetConfigurationContext.notify(_that.WidgetHelpers.WidgetEvent.ConfigurationChange,
                 _that.WidgetHelpers.WidgetEvent.Args(_that.getCustomSettings()));
@@ -267,9 +255,6 @@ export class Configuration {
             });
         });
 
-        if (_that.$enableTelemetry) {
-            tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackPageView("Finished Configuration");
-        }
         return _that.WidgetHelpers.WidgetStatusHelper.Success();
     }
 

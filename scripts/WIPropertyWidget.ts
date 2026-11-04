@@ -12,7 +12,7 @@
 
 /// <reference path="jquery.dotdotdot.d.ts" />
 "use strict";
-let DEBUG: boolean = true;
+let DEBUG: boolean = false;
 let logger = function(a: any, b: any) { if (DEBUG) { console.log(a, b || ""); } };
 
 import RestClient = require("TFS/Work/RestClient");
@@ -21,8 +21,7 @@ import WorkContracts = require("TFS/Work/Contracts");
 import RestClientWI = require("TFS/WorkItemTracking/RestClient");
 import WorkItemsContracts = require("TFS/WorkItemTracking/Contracts");
 import WorkItemServices = require("TFS/WorkItemTracking/Services");
-import * as tc from "telemetryclient-team-services-extension";
-import telemetryClientSettings = require("./telemetryClientSettings");
+import * as telemetry from "./telemetry";
 import * as moment from "moment";
 import { CustomTransportDataTypes } from "VSS/Ajax";
 
@@ -35,7 +34,6 @@ export class WidgetWIProperty {
     public clientwi = RestClientWI.getClient();
 
     public LoadWI(widgetSettings) {
-        tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackPageView("Starting to load Work Item");
         logger("LoadWI", "step 10");
         let customSettings = <ISettings>JSON.parse(widgetSettings.customSettings.data);
         logger("LoadWI", "step 12");
@@ -43,7 +41,7 @@ export class WidgetWIProperty {
         $title.text(widgetSettings.name);
         if (customSettings) {
             if (typeof customSettings.enableDebug === "undefined") {
-                customSettings.enableDebug = true;
+                customSettings.enableDebug = false;
                 logger("LoadWI", "enableDebug is undefined so set to " + customSettings.enableDebug);
             }
             logger("LoadWI", "debug = " + customSettings.enableDebug);
@@ -54,11 +52,6 @@ export class WidgetWIProperty {
                 logger("LoadWI", "enableTelemtry is undefined so set to " + customSettings.enableTelemetry);
             }
             logger("LoadWI", "enableTelemetry = " + customSettings.enableTelemetry);
-//            if (customSettings.enableTelemetry) {
-//                logger("LoadWI", "before call to telemetry");
-//                tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackPageView("Index");
-//                logger("LoadWI", "after call to telemetry");
-//            }
 
             $("#configwidget").hide();
             $("#loadingwidget").show();
@@ -79,21 +72,17 @@ export class WidgetWIProperty {
                         ;
                     logger("LoadWI", "values: " + $msg);
 
-                    if (customSettings.enableTelemetry) {
-                        if (customSettings.color !== "") { tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackPageView("Color is being used"); }
-                        if (customSettings.dateFormat !== "") { tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackPageView("DateFormat is being used"); }
-                        if (customSettings.title !== "") { tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackPageView("Title is being used"); }
-                        if (customSettings.wiColorPropertyName !== "") { tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackPageView("ColorProperty is being used"); }
-                        // Do not log wiPropertyName because it's required
-                        // Do not log wiid because it's required
-                        // Do not log enableTelemetry because if usage is logged then we know telemetry is enabled.
-                        // Do not log enableDebug because usage doesn't matter
-                    }
+                    if (customSettings.color !== "") { telemetry.track(customSettings.enableTelemetry, "FeatureUsed", { feature: "Color" }); }
+                    if (customSettings.dateFormat !== "") { telemetry.track(customSettings.enableTelemetry, "FeatureUsed", { feature: "DateFormat" }); }
+                    if (customSettings.title !== "") { telemetry.track(customSettings.enableTelemetry, "FeatureUsed", { feature: "Title" }); }
+                    if (customSettings.wiColorPropertyName !== "") { telemetry.track(customSettings.enableTelemetry, "FeatureUsed", { feature: "ColorProperty" }); }
+                    // Feature names only. Property names, values, and work item IDs are never sent.
 
                     this.DisplayWI(wi, customSettings.wiPropertyName, customSettings.wiColorPropertyName, customSettings.color, customSettings.title, customSettings.dateFormat);
 
                     $("#loadingwidget").hide();
                     $("#content").show();
+                    telemetry.track(customSettings.enableTelemetry, "WidgetRendered");
 
                     $("#wi-title").dotdotdot();
                     $("#wi-desc").dotdotdot();
@@ -115,7 +104,7 @@ export class WidgetWIProperty {
                         $("#contentError").html(reject.message);
                     }
                     logger("LoadWI", "Exception: " + reject.message);
-                    tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackException(reject.message);
+                    telemetry.trackError(customSettings.enableTelemetry, "load-" + String(reject.status || "unknown"));
                 });
             } else {
                 $("#loadingwidget").hide();
@@ -123,7 +112,7 @@ export class WidgetWIProperty {
                 $("#contentError").addClass("error");
                 $("#contentError").html("Work Item Id has not been configured.");
                 logger("LoadWI", "Exception: Work Item Id has not been configured.");
-                tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackException("Work Item Id has not been configured.");
+                telemetry.trackError(customSettings.enableTelemetry, "not-configured");
             }
         } else {
             $title.attr("style", "color:grey");
@@ -133,10 +122,8 @@ export class WidgetWIProperty {
             $("#configwidget").show();
 
             logger("LoadWI", "no settings");
-            tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackPageView("No settings configured");
         }
 
-        tc.TelemetryClient.getClient(telemetryClientSettings.settings).trackPageView("Finished loading Work Item");
         return this.WidgetHelpers.WidgetStatusHelper.Success();
     }
 
