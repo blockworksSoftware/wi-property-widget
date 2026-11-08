@@ -26,6 +26,18 @@ Your widget displays the progress for the project and you also have a progress-c
 ### (New) Target Date
 In the latest version of this widget, you can now specify the date format to display a date field. This is typically used when you want to display your Target Date or Go-Live Date on the dashboard. It uses the standard javascript formats, such as 'MMM DD YYYY'. The date format option only applies if the selected property is a date.
 
+## Supported colors
+
+The Color box and the Title Status Color property both take a standard web color value. Use one of these forms:
+
+- A color name, such as `red`, `orange`, `gold`, `green`, `blue`, `purple`, or `gray`. Names aren't case-sensitive.
+- A hex value, such as `#FFC000`.
+- An RGB value, such as `rgb(255, 191, 0)`.
+
+`Amber` is also supported in either box, in any capitalization, and shows as `#FFC000`. Note that `yellow` is a different color (`#ffff00`).
+
+If a value isn't a valid color, the widget shows no color and doesn't show an error. If a color doesn't appear, check the value first.
+
 ## Quick steps to get started
 
 ### Method 1

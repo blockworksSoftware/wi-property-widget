@@ -150,6 +150,7 @@ export class WidgetWIProperty {
 
         let color = this.getWorkItemColor(witype);
         if (colorstring !== "") {
+            colorstring = this.resolveColor(colorstring);
             $("#content").attr("style", "background-color: " + colorstring + ";");
             color = colorstring;
             logger("DisplayWI", "color prop: " + colorfield + "; value: " + color + "; color: " + colorstring);
@@ -223,16 +224,18 @@ export class WidgetWIProperty {
         return (txt);
     }
 
+    // Amber isn't a CSS color name, so map it to its hex value. Any capitalization works.
+    private resolveColor(value: string): string {
+        logger("resolveColor", "step 1");
+        if (typeof value === "string" && value.trim().toLowerCase() === "amber") {
+            return "#FFC000";
+        }
+        return value;
+    }
+
     private getWorkItemColor(workItemType: string): string {
         logger("getWorkItemColor", "step 1");
-        let witColor = "";
-        switch (workItemType) {
-            case "AMBER":
-                witColor = "#ffbf00";
-                break;
-            default:
-                witColor = workItemType;
-        }
+        let witColor = this.resolveColor(workItemType);
         logger("getWorkItemColor", "result: " + witColor);
         return witColor;
     }
