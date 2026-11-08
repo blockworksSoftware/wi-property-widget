@@ -22,18 +22,6 @@ Your widget displays the progress for the project and you also have a progress-c
 ### (New) Target Date
 In the latest version of this widget, you can now specify the date format to display a date field. This is typically used when you want to display your Target Date or Go-Live Date on the dashboard. It uses the standard javascript formats, such as 'MMM DD YYYY'. The date format option only applies if the selected property is a date.
 
-## Supported colors
-
-The Color box and the Title Status Color property both take a standard web color value. Use one of these forms:
-
-- A color name, such as `red`, `orange`, `gold`, `green`, `blue`, `purple`, or `gray`. Names aren't case-sensitive.
-- A hex value, such as `#FFC000`.
-- An RGB value, such as `rgb(255, 191, 0)`.
-
-`Amber` is also supported in either box, in any capitalization, and shows as `#FFC000`. Note that `yellow` is a different color (`#ffff00`).
-
-If a value isn't a valid color, the widget shows no color and doesn't show an error. If a color doesn't appear, check the value first.
-
 ## Quick steps to get started
 
 ### Method 1
@@ -48,8 +36,8 @@ If a value isn't a valid color, the widget shows no color and doesn't show an er
 - Enter a Work Item Id and tab out of the text box.
 - Enter a Title to display (at the top of the widget) and tab out of the text box.
 - Select a Property Name and tab out of the dropdown.
-- (Optional) Select a Title Status Color Property Name (background color for the Title) and tab out of the dropdown. For example, this could be the status color for the project.
-- (Optional) Enter a Color to set the background color for the entire widget and tab out of the text box.
+- (Optional) Select a Title Status Color Property Name (sets the title bar color) and tab out of the dropdown. For example, this could be the status color for the project.
+- (Optional) Enter a Title and Body Background Color Override to set the background color for the whole widget and the title bar, and tab out of the text box.
 - (Optional) Enter a Date Format to format the widget context if it's a date and tab out of the text box. For example, use MMM DD YYYY to format the Target Go Live property.
 - Click on Save
 
@@ -67,6 +55,66 @@ If a value isn't a valid color, the widget shows no color and doesn't show an er
 
 - You can select multiple work items in a list
 - On the dashboard, click on the widget to open the work item in a modal form 
+
+## Settings reference
+
+To change these settings, click **Configure** on the widget. Only **Work Item Id** and **Property Name to Display** are needed to show the widget. The other settings are optional.
+
+| Setting | What it does | Example |
+|---|---|---|
+| Work Item Id | The work item the widget shows. Open the work item and look at the address bar. The number at the end is the Work Item Id. | `4521` |
+| Title to Display | The heading shown at the top of the widget. | `Project Overview` |
+| Property Name to Display | The field on the work item whose content the widget shows. | `Description` |
+| Title Status Color Property Name | A field on the work item that holds a color. The widget uses that color for the title bar. See Setting up a status color field below. | `Status Color` |
+| Title and Body Background Color Override | A fixed color for the whole widget and the title bar. When you set it, it replaces the color from the status field. See Supported colors below. | `#FFC000` or `gold` |
+| Date Format Override | Shows a date field in the format you choose. It's ignored if the property isn't a date. Use the [Moment.js format codes](https://momentjs.com/docs/#/displaying/format/). | `MMM DD YYYY` |
+| Enable Telemetry | Sends anonymous usage counts so the widget can be improved. On by default. | On |
+| Enable Debugging | For support only. Writes detailed messages to the browser console. | Off |
+
+### Setting up a status color field
+
+Use this when the title bar should change color based on a value on the work item, such as a Red, Amber, or Green status.
+
+1. Choose a field on the work item to hold the status. For a fixed list of colors, use a **Picklist** field with the values you want, such as `Red`, `Amber`, and `Green`. If the field doesn't exist yet, ask your Azure DevOps administrator to add it.
+2. Set the field on the work item, for example to `Amber`.
+3. In the widget's **Configure** panel, choose that field in **Title Status Color Property Name**.
+
+The title bar changes to match the field's value. If the field is empty, or its value isn't a color the widget recognizes, the title bar keeps its default color. Check the spelling of the value against the supported colors below.
+
+Tip: `Green` is a dark green in the widget. For a brighter green, use a hex value such as `#00B050` as the picklist value.
+
+## Supported colors
+
+The **Title and Body Background Color Override** box and the **Title Status Color Property Name** field both take a standard web color. Use one of these forms:
+
+- A color name, such as `red`, `orange`, `gold`, `green`, `blue`, `purple`, or `gray`. Names aren't case-sensitive.
+- A hex value, such as `#FFC000`.
+- An RGB value, such as `rgb(255, 192, 0)`.
+
+`Amber` is also supported in either place, in any capitalization, and shows as `#FFC000`. Note that `yellow` is a different color (`#ffff00`).
+
+## Troubleshooting
+
+**"Work Item Id has not been configured."**
+Click **Configure**, enter a Work Item Id, and click **Save**.
+
+**"TF401232: Work item Id: ... does not exist, or you do not have permissions to read it."**
+Check the Work Item Id. You also need permission to view that work item.
+
+**The title bar doesn't change color.**
+Check that the status field has a value, that the spelling matches a supported color, and that **Title and Body Background Color Override** is empty. The override replaces the status color.
+
+**A date isn't formatted.**
+The property must be a date field, and the format must use valid codes, such as `MMM DD YYYY`.
+
+**Some formatting is missing.**
+For security, the widget removes scripts and other unsupported content. It keeps bold, italic, underline, headings, bulleted and numbered lists, links, and pictures stored at a web address. Links open in a new tab.
+
+**Line breaks don't match what you typed.**
+This is a known limitation. Line breaks in plain-text fields may not show as entered.
+
+**Still stuck?**
+Turn on **Enable Debugging**, click **Save**, reload the dashboard, and open the browser console (press F12, then select the Console tab). Send the messages with the issue to your widget administrator. The messages can include your setting values, so remove them before you share them outside your team. Then turn **Enable Debugging** off.
 
 ## Privacy
 Please note that personal and confidential information is only saved in your Azure DevOps account using the built-in Azure DevOps data storage service "Team Services ExtensionDataService". You find more information about that service at Microsoft Docs: Azure DevOps Data storage.
