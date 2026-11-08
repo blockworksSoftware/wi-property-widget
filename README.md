@@ -34,12 +34,9 @@ The Color box and the Title Status Color property both take a standard web color
 - A hex value, such as `#ffbf00`.
 - An RGB value, such as `rgb(255, 191, 0)`.
 
-`Amber` isn't a standard color name, so it has no effect. Use `#ffbf00` instead.
+`Amber` is also supported in either box, in any capitalization, and shows as `#ffbf00`. Note that `yellow` is a different color (`#ffff00`).
 
-Two more things to know:
-
-- The Title Status Color property also recognizes the value `AMBER` (all capitals) and shows it as `#ffbf00`. This doesn't work in the Color box, and other capitalizations of `Amber` don't work anywhere.
-- If a value isn't a valid color, the widget shows no color and doesn't show an error. If a color doesn't appear, check the value first.
+If a value isn't a valid color, the widget shows no color and doesn't show an error. If a color doesn't appear, check the value first.
 
 ## Quick steps to get started
 
