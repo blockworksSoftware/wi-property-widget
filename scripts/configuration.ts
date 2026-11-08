@@ -124,7 +124,7 @@ export class Configuration {
                 this.getSortedFieldsList2(wi).then((fieldList) => {
                     for (const field of fieldList) {
                         const opt = document.createElement("option");
-                        opt.innerHTML = field;
+                        opt.textContent = field;
                         opt.value = field;
                         this.$wipropertyname[0].appendChild(opt);
                     }
@@ -140,7 +140,7 @@ export class Configuration {
                 this.getSortedFieldsList2(wi).then((fieldList) => {
                     for (const field of fieldList) {
                         const opt = document.createElement("option");
-                        opt.innerHTML = field;
+                        opt.textContent = field;
                         opt.value = field;
                         this.$wicolorpropertyname[0].appendChild(opt);
                     }
@@ -225,7 +225,7 @@ export class Configuration {
             this.getSortedFieldsList2(wi).then((fieldList) => {
                 for (const field of fieldList) {
                     const opt = document.createElement("option");
-                    opt.innerHTML = field;
+                    opt.textContent = field;
                     opt.value = field;
                     this.$wipropertyname[0].appendChild(opt);
                 }
@@ -241,7 +241,7 @@ export class Configuration {
             this.getSortedFieldsList2(wi).then((fieldList) => {
                 for (const field of fieldList) {
                     const opt = document.createElement("option");
-                    opt.innerHTML = field;
+                    opt.textContent = field;
                     opt.value = field;
                     this.$wicolorpropertyname[0].appendChild(opt);
                 }
