@@ -1,5 +1,7 @@
 ## Work Item Property Widget ##
 
+> **This extension has moved.** Source code and issues are now at [github.com/blockworksSoftware/wi-property-widget](https://github.com/blockworksSoftware/wi-property-widget). The extension ID and publisher are unchanged, so existing installs keep updating. Report issues in the new repository.
+
 The **Work Item Property Widget** displays a card showing the property selected on your dashboards. You select the work item and which property to display.
 
 There are times when you have a parent or central work item that contains information that you want displayed on multiple dashboards. Instead of adding static content to each dashboard, this widget allows you to display information from the work item and then maintain the information in one location. 
