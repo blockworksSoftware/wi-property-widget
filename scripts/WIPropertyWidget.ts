@@ -23,6 +23,7 @@ import WorkItemsContracts = require("TFS/WorkItemTracking/Contracts");
 import WorkItemServices = require("TFS/WorkItemTracking/Services");
 import * as telemetry from "./telemetry";
 import * as moment from "moment";
+import { sanitizeHtml } from "./htmlSanitizer";
 import { CustomTransportDataTypes } from "VSS/Ajax";
 
 export class WidgetWIProperty {
@@ -99,9 +100,9 @@ export class WidgetWIProperty {
                     $("#contentError").attr("style", "display:block;margin:10px;");
                     $("#contentError").addClass("error");
                     if (reject.status === "404") {
-                        $("#contentError").html("TF401232: Work item Id: " + customSettings.wiId + " does not exist, or you do not have permissions to read it.");
+                        $("#contentError").text("TF401232: Work item Id: " + customSettings.wiId + " does not exist, or you do not have permissions to read it.");
                     } else {
-                        $("#contentError").html(reject.message);
+                        $("#contentError").text(reject.message);
                     }
                     logger("LoadWI", "Exception: " + reject.message);
                     telemetry.trackError(customSettings.enableTelemetry, "load-" + String(reject.status || "unknown"));
@@ -110,7 +111,7 @@ export class WidgetWIProperty {
                 $("#loadingwidget").hide();
                 $("#contentError").attr("style", "display:block;margin:10px;");
                 $("#contentError").addClass("error");
-                $("#contentError").html("Work Item Id has not been configured.");
+                $("#contentError").text("Work Item Id has not been configured.");
                 logger("LoadWI", "Exception: Work Item Id has not been configured.");
                 telemetry.trackError(customSettings.enableTelemetry, "not-configured");
             }
@@ -163,33 +164,34 @@ export class WidgetWIProperty {
         if (desc !== undefined) {
             // desc = this.noHtml(desc);
 
-            $("#wi-desc").html(desc);
+            // field values are untrusted: keep formatting, remove script, handlers and remote content
+            $("#wi-desc").html(sanitizeHtml(desc));
             if (dateFormat !== "") {
                 if (moment(desc).isValid()) {
                     logger("DisplayWI", "format date: " + moment(desc).format(dateFormat));
                     logger("DisplayWI", "check if valid date: " + moment(desc).isValid() + "; " + desc);
-                    $("#wi-desc").html(moment(desc).format(dateFormat));
+                    $("#wi-desc").text(moment(desc).format(dateFormat));
                 }
             }
         } else {
             $("#wi-desc").html("");
         }
 
-        $("#updateby").html("Updated by ".concat(wi.fields["System.ChangedBy"]));
-        $("#updatedate").html(this.DeltaDate(new Date(wi.fields["System.ChangedDate"])).text);
+        $("#updateby").text("Updated by ".concat(wi.fields["System.ChangedBy"]));
+        $("#updatedate").text(this.DeltaDate(new Date(wi.fields["System.ChangedDate"])).text);
 
         let assign = wi.fields["System.AssignedTo"];
 
         if (assign !== undefined) {
-            $("#assignuser").html(assign);
+            $("#assignuser").text(assign);
             $("#assignavatar").attr("src", this.getMemberAvatarUrl(assign));
         } else {
-            $("#assignuser").html("Unassigned");
+            $("#assignuser").text("Unassigned");
             $("#assignavatar").hide();
         }
 
         let state = wi.fields["System.State"];
-        $("#state").html(state);
+        $("#state").text(state);
 
         let statecolor = this.getStateColor(state);
         let backgroundcolor = statecolor;
