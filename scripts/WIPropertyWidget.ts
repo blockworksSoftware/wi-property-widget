@@ -228,7 +228,7 @@ export class WidgetWIProperty {
     private resolveColor(value: string): string {
         logger("resolveColor", "step 1");
         if (typeof value === "string" && value.trim().toLowerCase() === "amber") {
-            return "#ffbf00";
+            return "#FFC000";
         }
         return value;
     }
