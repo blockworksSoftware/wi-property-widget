@@ -174,10 +174,11 @@ export class WidgetWIProperty {
             // field values are untrusted: keep formatting, remove script, handlers and remote content
             $("#wi-desc").html(sanitizeHtml(desc));
             if (dateFormat !== "") {
-                if (moment(desc).isValid()) {
-                    logger("DisplayWI", "format date: " + moment(desc).format(dateFormat));
-                    logger("DisplayWI", "check if valid date: " + moment(desc).isValid() + "; " + desc);
-                    $("#wi-desc").text(moment(desc).format(dateFormat));
+                let date = this.toDisplayDate(desc);
+                if (date.isValid()) {
+                    logger("DisplayWI", "format date: " + date.format(dateFormat));
+                    logger("DisplayWI", "check if valid date: " + date.isValid() + "; " + desc);
+                    $("#wi-desc").text(date.format(dateFormat));
                 }
             }
         } else {
@@ -209,6 +210,16 @@ export class WidgetWIProperty {
             backgroundcolor = "transparent";
         }
         $("#statecircle").attr("style", "border-color:" + statecolor + ";background-color:" + backgroundcolor + "");
+    }
+
+    // Azure DevOps stores date-only values as midnight UTC. Showing them in local time moves them back a day
+    // for users west of UTC, so midnight UTC values keep their UTC calendar date. Other values use local time.
+    private toDisplayDate(value: string): moment.Moment {
+        let utc = moment.utc(value);
+        if (utc.isValid() && utc.format("HH:mm:ss.SSS") === "00:00:00.000") {
+            return utc;
+        }
+        return moment(value);
     }
 
     private isValidDate(date) {
