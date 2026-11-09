@@ -95,7 +95,7 @@ The **Title and Body Background Color Override** box and the **Title Status Colo
 - A hex value, such as `#FFC000`.
 - An RGB value, such as `rgb(255, 192, 0)`.
 
-`Amber` is also supported in either place, in any capitalization, and shows as `#FFC000`. Note that `yellow` is a different color (`#ffff00`).
+`Amber` is also supported in either place, in any capitalization, and shows as `#FFC000`. To show pure yellow instead, use `Yellow` (`#ffff00`). Pick whichever name your team uses in the status field.
 
 The widget picks black or white text automatically, so the text stays readable on the color you choose.
 
