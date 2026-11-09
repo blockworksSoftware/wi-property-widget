@@ -97,6 +97,8 @@ The **Title and Body Background Color Override** box and the **Title Status Colo
 
 `Amber` is also supported in either place, in any capitalization, and shows as `#FFC000`. Note that `yellow` is a different color (`#ffff00`).
 
+The widget picks black or white text automatically, so the text stays readable on the color you choose.
+
 ## Troubleshooting
 
 **"Work Item Id has not been configured."**

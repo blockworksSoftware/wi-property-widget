@@ -149,15 +149,21 @@ export class WidgetWIProperty {
         wititle = titlestring;
 
         let color = this.getWorkItemColor(witype);
+        let bodyText = "";
+        let bodyStyle = "";
         if (colorstring !== "") {
             colorstring = this.resolveColor(colorstring);
-            $("#content").attr("style", "background-color: " + colorstring + ";");
+            bodyText = this.getTextColor(colorstring);
+            bodyStyle = "background-color: " + colorstring + ";" + (bodyText ? " color: " + bodyText + ";" : "");
             color = colorstring;
             logger("DisplayWI", "color prop: " + colorfield + "; value: " + color + "; color: " + colorstring);
         }
+        // set on every render so a Color that was cleared doesn't keep its old background
+        $("#content").attr("style", bodyStyle);
 
 //        $("#wi-header").attr("style", "border-left-color: " + color + ";");
-        $("#wi-header").attr("style", "background-color: " + color + ";");
+        let headerText = this.getTextColor(color);
+        $("#wi-header").attr("style", "background-color: " + color + ";" + (headerText ? " color: " + headerText + ";" : ""));
 //        $("#wi-type").html(witype + " " + wi.id);
         $("#wi-title").text(wititle);
 
@@ -178,6 +184,9 @@ export class WidgetWIProperty {
             $("#wi-desc").html("");
         }
 
+        // links and the "Updated by" line have their own colors, so they follow the text color too
+        $("#wi-desc a").css("color", bodyText);
+        $(".wi-updated").attr("style", bodyText ? "color: " + bodyText + ";" : "");
         $("#updateby").text("Updated by ".concat(wi.fields["System.ChangedBy"]));
         $("#updatedate").text(this.DeltaDate(new Date(wi.fields["System.ChangedDate"])).text);
 
@@ -231,6 +240,31 @@ export class WidgetWIProperty {
             return "#FFC000";
         }
         return value;
+    }
+
+    // Returns black or white text, whichever reads better on the background. Returns "" when the
+    // background isn't a solid color, so the theme text color stays.
+    private getTextColor(background: string): string {
+        logger("getTextColor", "step 1");
+        let probe = document.createElement("div");
+        probe.style.color = this.resolveColor(background);
+        if (probe.style.color === "") {
+            return "";
+        }
+        document.body.appendChild(probe);
+        let parts = (window.getComputedStyle(probe).color || "").match(/[\d.]+/g) || [];
+        document.body.removeChild(probe);
+        let alpha = parts.length === 4 ? Number(parts[3]) : 1;
+        if (parts.length < 3 || alpha < 1) {
+            return "";
+        }
+        let channels = parts.slice(0, 3).map(part => {
+            let c = Number(part) / 255;
+            return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+        });
+        let luminance = 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+        // black text reads better above this luminance, white text below it
+        return luminance > 0.179 ? "#000000" : "#ffffff";
     }
 
     private getWorkItemColor(workItemType: string): string {
