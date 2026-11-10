@@ -121,7 +121,7 @@ Turn on **Enable Debugging**, click **Save**, reload the dashboard, and open the
 ## Privacy
 Please note that personal and confidential information is only saved in your Azure DevOps account using the built-in Azure DevOps data storage service "Team Services ExtensionDataService". You find more information about that service at Microsoft Docs: Azure DevOps Data storage.
 
-Usage telemetry is on by default and can be turned off for each widget with **Enable Telemetry** in its configuration. It records which features are used and how often, using one-way hashes of your Azure DevOps user and organization IDs. It never includes the values you enter or the content of your work items. See the privacy policy for details and retention periods.
+Usage telemetry is on by default and can be turned off for each widget with **Enable Telemetry** in its configuration. It records which features are used, the widget version, and how often, using one-way hashes of your Azure DevOps user and organization IDs. It never includes the values you enter or the content of your work items. See the privacy policy for details and retention periods.
 
 ## Notices
 Notices for certain third party software included in this solution are provided here: [Third Party Notice](ThirdPartyNotices.txt).

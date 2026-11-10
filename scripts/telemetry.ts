@@ -59,7 +59,14 @@ export function track(enabled: boolean, name: string, properties?: { [key: strin
     }
     ensureSession();
     const send = () => {
-        AppInsights.trackEvent(EVENT_PREFIX + name, properties);
+        // every event carries the widget version, so results can be grouped by the build that sent them
+        const eventProperties: { [key: string]: string } = { version: VSS.getExtensionContext().version };
+        for (const key in properties) {
+            if (properties.hasOwnProperty(key)) {
+                eventProperties[key] = properties[key];
+            }
+        }
+        AppInsights.trackEvent(EVENT_PREFIX + name, eventProperties);
         AppInsights.flush();
     };
     if (sessionReady) {
