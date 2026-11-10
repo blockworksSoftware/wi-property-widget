@@ -67,7 +67,7 @@ To change these settings, click **Configure** on the widget. Only **Work Item Id
 | Property Name to Display | The field on the work item whose content the widget shows. | `Description` |
 | Title Status Color Property Name | A field on the work item that holds a color. The widget uses that color for the title bar. See Setting up a status color field below. | `Status Color` |
 | Title and Body Background Color Override | A fixed color for the whole widget and the title bar. When you set it, it replaces the color from the status field. See Supported colors below. | `#FFC000` or `gold` |
-| Date Format Override | Shows a date field in the format you choose. It's ignored if the property isn't a date. Use the [Moment.js format codes](https://momentjs.com/docs/#/displaying/format/). | `MMM DD YYYY` |
+| Date Format Override | Shows a date field in the format you choose. It's ignored if the property isn't a date. Date-only fields, such as Target Date, show the same calendar date in every time zone. Use the [Moment.js format codes](https://momentjs.com/docs/#/displaying/format/). | `MMM DD YYYY` |
 | Enable Telemetry | Sends anonymous usage counts so the widget can be improved. On by default. | On |
 | Enable Debugging | For support only. Writes detailed messages to the browser console. | Off |
 
