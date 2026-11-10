@@ -15,7 +15,7 @@
 
 // Tags that keep their formatting. Any other tag is removed, and its text is kept.
 const allowedTags: { [tag: string]: boolean } = {
-    "A": true, "B": true, "BR": true, "EM": true, "H1": true, "H2": true, "H3": true,
+    "A": true, "B": true, "BR": true, "DIV": true, "EM": true, "H1": true, "H2": true, "H3": true,
     "H4": true, "H5": true, "H6": true, "I": true, "LI": true, "OL": true, "P": true,
     "STRONG": true, "U": true, "UL": true,
 };
@@ -78,7 +78,7 @@ function copyChildren(source: Node, target: Node, doc: Document): void {
                 target.appendChild(copy);
                 copyChildren(element, copy, doc);
             } else {
-                // unknown tag, for example DIV or IMG: keep its text and drop the tag
+                // unknown tag, for example SPAN or IMG: keep its text and drop the tag
                 copyChildren(element, target, doc);
             }
         }
