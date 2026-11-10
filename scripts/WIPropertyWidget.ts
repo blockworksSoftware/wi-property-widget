@@ -172,7 +172,7 @@ export class WidgetWIProperty {
             // desc = this.noHtml(desc);
 
             // field values are untrusted: keep formatting, remove script, handlers and remote content
-            $("#wi-desc").html(sanitizeHtml(desc));
+            $("#wi-desc").html(sanitizeHtml(this.toDisplayHtml(desc)));
             if (dateFormat !== "") {
                 let date = this.toDisplayDate(desc);
                 if (date.isValid()) {
@@ -220,6 +220,16 @@ export class WidgetWIProperty {
             return utc;
         }
         return moment(value);
+    }
+
+    // Plain text keeps its line breaks, which HTML would collapse into spaces. Values that already have
+    // HTML tags are returned unchanged for the sanitizer.
+    private toDisplayHtml(value: any): string {
+        let text = String(value);
+        if (/<[a-z][\s\S]*>/i.test(text)) {
+            return text;
+        }
+        return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\r?\n/g, "<br>");
     }
 
     private isValidDate(date) {
