@@ -76,6 +76,12 @@ export function track(enabled: boolean, name: string, properties?: { [key: strin
     }
 }
 
-export function trackError(enabled: boolean, code: string): void {
-    track(enabled, "Error", { code: code });
+export function trackError(enabled: boolean, code: string, properties?: { [key: string]: string }): void {
+    const eventProperties: { [key: string]: string } = { code: code };
+    for (const key in properties) {
+        if (properties.hasOwnProperty(key)) {
+            eventProperties[key] = properties[key];
+        }
+    }
+    track(enabled, "Error", eventProperties);
 }
