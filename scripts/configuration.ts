@@ -12,8 +12,10 @@
 
 /// <reference path='isettings.d.ts' />
 "use strict";
-let DEBUG: boolean = true;
+let DEBUG: boolean = false;
 let logger = function(a: any, b: any) { if (DEBUG) { console.log(a, b || ""); } };
+// Property shown when a widget has none configured yet.
+const DEFAULT_PROPERTY = "System.Title";
 
 import Q = require("q");
 import Controls = require("VSS/Controls");
@@ -74,8 +76,8 @@ export class Configuration {
         if (settings && settings.wiPropertyName) {
             $wipropertyname.val(settings.wiPropertyName);
         } else {
-            // first load
-            $wipropertyname.val("");
+            // first load: the title is the most useful property to show
+            $wipropertyname.val(DEFAULT_PROPERTY);
         }
         if (settings && settings.wiColorPropertyName) {
             $wicolorpropertyname.val(settings.wiColorPropertyName);
@@ -103,17 +105,11 @@ export class Configuration {
             // first load
             $dateFormat.val("");
         }
-        if (settings && settings.enableTelemetry !== null) {
-            $enableTelemetry.prop("checked", settings.enableTelemetry);
-        } else {
-            $enableTelemetry.prop("checked", true);
-        }
-        if (settings && settings.enableDebug !== null) {
-            DEBUG = settings.enableDebug;
-            $enableDebug.prop("checked", settings.enableDebug);
-        } else {
-            $enableDebug.prop("checked", true);
-        }
+        // A missing flag is undefined, not null. Telemetry defaults to on, debugging to off,
+        // matching the widget (WIPropertyWidget.ts) so the page shows what the widget does.
+        $enableTelemetry.prop("checked", (settings && typeof settings.enableTelemetry === "boolean") ? settings.enableTelemetry : true);
+        DEBUG = (settings && typeof settings.enableDebug === "boolean") ? settings.enableDebug : false;
+        $enableDebug.prop("checked", DEBUG);
 
         let $errorSingleLineInput = $("#linewi .validation-error-text");
         _that.$wiid.blur(() => {
@@ -133,7 +129,7 @@ export class Configuration {
                         $wipropertyname.val(settings.wiPropertyName);
                     } else {
                         // first load
-                        $wipropertyname.val("");
+                        $wipropertyname.val(DEFAULT_PROPERTY);
                     }
                 });
 
@@ -234,7 +230,7 @@ export class Configuration {
                     $wipropertyname.val(settings.wiPropertyName);
                 } else {
                     // first load
-                    $wipropertyname.val("");
+                    $wipropertyname.val(DEFAULT_PROPERTY);
                 }
             });
 
