@@ -20,7 +20,7 @@ The widget sends:
 
 The widget does not send work item IDs or content, property names or values, titles, colors, date formats, or names and email addresses.
 
-Adding the widget from a dashboard's context menu is counted as a feature use. The Enable Telemetry setting does not apply to this, because it happens before any widget is configured.
+Adding the widget from a work item's context menu is counted as a feature use. When that menu opens, the widget also records whether the team's dashboards could be listed: where the menu was opened (backlog, board, query results, or work item form), whether a team was in context, the number of dashboards, and on failure an HTTP status code. Dashboard names and ids are not sent. The Enable Telemetry setting does not apply to the context menu, because it happens before any widget is configured.
 
 For more information about Application Insights please refer to [https://azure.microsoft.com/en-us/services/application-insights].
 
