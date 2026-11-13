@@ -79,7 +79,9 @@ export class WidgetWIProperty {
                     if (customSettings.wiColorPropertyName !== "") { telemetry.track(customSettings.enableTelemetry, "FeatureUsed", { feature: "ColorProperty" }); }
                     // Feature names only. Property names, values, and work item IDs are never sent.
 
-                    this.DisplayWI(wi, customSettings.wiPropertyName, customSettings.wiColorPropertyName, customSettings.color, customSettings.title, customSettings.dateFormat);
+                    // Older or hand-written settings may have no property; show the title.
+                    const propertyName = customSettings.wiPropertyName || "System.Title";
+                    this.DisplayWI(wi, propertyName, customSettings.wiColorPropertyName, customSettings.color, customSettings.title, customSettings.dateFormat);
 
                     $("#loadingwidget").hide();
                     $("#content").show();
